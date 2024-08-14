@@ -1,0 +1,14 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    float a,x;
+    cout<<"Ingrese la longitud de los lados del cuadrado: ";
+    cin>>a;
+    x=a*a;
+    cout<<"El area del cuadrado es: "<<x;
+    
+    return 0;
+}
