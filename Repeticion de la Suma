@@ -1,0 +1,20 @@
+#include <iostream>
+
+using namespace std;
+int main()
+{
+    int contador=1, acumulador=0,a;
+    do{
+      cout<<"Ingrese la cantidad de repeticion para la suma: ";
+      cin>>a;
+    }while((0>=a)||(a>50));
+    while (contador <=a)
+    {
+        acumulador=acumulador+contador;
+        contador=contador+1;
+    }
+    
+    cout<<"La suma de los "<<a<<" numeros es: "<<acumulador;
+
+    return 0;
+}
