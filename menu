@@ -1,0 +1,69 @@
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+int main()
+{
+    int opcion;
+    double a,b,c,d,g,x,y,z,j,i,m ;
+    float C,t,n,I;
+    float CAPITAL,N,T,A,INTERES;
+    do{
+        cout<<"MENU"<<endl;
+        cout<<"1.Nota Final"<<endl;
+        cout<<"2.Interes Simple"<<endl;
+        cout<<"3.Interes Compuesto"<<endl;
+        cout<<"0.Salir"<<endl;
+        cout<<"Ingrese una opcion"<<endl;
+        cin>>opcion;
+        
+        switch(opcion){
+            case 1: 
+                 cout<< " cual es la nota de su primer parcial? " ;
+                 cin>> a ;
+                 cout<< " cual es la nota de su segundo parcial?" ;
+                 cin>> b ;
+                 cout<< " cual es la nota de su tercer parcial? ";
+                 cin>> c ;
+                 cout<< " cual es nota de su examen final ?" ;
+                 cin>> d ;
+                 cout<< " cual es la nota de su proyecto?";
+                 cin>> g ;
+                 x=a*13.33333/100 ;
+                 y=b*13.33333/100 ;
+                 z=c*13.33333/100 ;
+                 j=d*40/100 ;
+                 i=g*20/100 ;
+                 m=x+y+z+j+i;
+                 cout<< "su promedio es"<<m<<endl;
+                 break;
+            case 2:
+                 cout<< "cual es su capital: " ;
+                 cin>> C;
+                 cout<< " cual es su tasa de interes %: ";
+                 cin >> t ;
+                 cout << " ingrese la cantidad de años : ";
+                 cin>>n ;
+                 I= C*n*(t/100) ;
+                 cout << " el interes es : "<< I <<endl;
+                 break;
+            case 3:
+                 cout<< "Ingrese cual es su capital inicial : " ;
+	             cin>> CAPITAL;
+	             cout<< "Ingrese el tiempo : ";
+	             cin >> N ;
+	             cout << "Ingrese la  tasa de interes : ";
+	             cin>> T ;
+	             A = CAPITAL*pow(1+T/100,N) ; 
+                 INTERES = A-CAPITAL;	;
+	             cout << " El interes compuesto es de : "<< INTERES <<endl;
+	             break;
+	       case 0:cout<<"Salir"<<endl;
+	              break;
+	   default: cout<<"Opcion invalida"<<endl;
+
+        }
+    } while(opcion!=0);
+
+    return 0;
+}
