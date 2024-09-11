@@ -1,0 +1,15 @@
+#include <iostream>
+using namespace std;
+int main()
+{
+    float total,c;
+    int p;
+    cout<<"Ingrese la cantidad de personas: ";
+    cin>>p;
+    cout<<"Ingrese el costo por persona: ";
+    cin>>c;
+    total=c*p;
+    cout<<"El costo total del evento es: "<<total<<" bs";
+
+    return 0;
+}
