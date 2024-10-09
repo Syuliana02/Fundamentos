@@ -2,40 +2,96 @@
 
 using namespace std;
 
+int calcularMCD(int a, int b)
+{
+	while (b != 0)
+	{
+		int temp = b;
+		b = a % b;
+		a = temp;
+	}
+	return a;
+}
+
+int calcularMCM(int a, int b)
+{
+	return (a * b) / calcularMCD(a, b);
+}
+
+
 int main()
 {
-    int opcion,N,cont=0,suma=0;
-    bool band=false
-    
-    do{
-        cout<<"Menu: "<<endl;
-        cout<<"1.Suma de numeros primos\n";
-        cout<<"2.Minimo Comun Multiplo (MCM)\n";
-        cout<<"3.Maximo Comun Divisor (MCD)\n";
-        cout<<"0.Salir\n";
-        cout<<"Seleccione una opcion: ";
-        cin>>opcion;
-        
-        switch(opcion){
-            case 1. cout<<"Cuantos numeros primos a sumar: ";
-            cin>>N;
-            while(cont<N) {
-                for(int i=1;i<=32768;i++)
-                {
-                    for(int j=2;j<(i-1);j++)
-                    {
-                        if((i%j)==0){
-                            band=true;
-                            break;
-                        }
-                    }
-                    if(!band)
-                    suma=suma+i;
-                    band=false;
-                }
-        }
-    }    
-    
 
-    return 0;
+	int opcion,N,cont=0,suma=0;
+
+	do {
+		cout<<"-_-_-_-_-_-Menu-_-_-_-_-_- "<<endl;
+		cout<<"1.Suma de numeros primos"<<endl;
+		cout<<"2.Minimo Comun Multiplo (MCM)"<<endl;
+		cout<<"3.Maximo Comun Divisor (MCD)"<<endl;
+		cout<<"0.Salir"<<endl;
+		cout<<"Seleccione una opcion: ";
+		cin>>opcion;
+
+		switch(opcion) {
+		    case 1:
+		    {
+                    cout<<"Cuantos numeros primos a sumar: " ;
+			        cin>>N;
+			        while(cont<N) 
+			        {
+				        for(int i=2; i<=5; i++) 
+				        {
+                           bool band=false;
+					       for(int j=2; j*j<=i; j++) 
+					       {
+						      if(i%j==0) 
+						      {
+						        band=true;
+							    break;
+						      }
+					        }
+					       if(band)
+						   suma=suma+i;
+				        }
+			        }
+		    }	
+		    case 2:
+		    {
+			        int num1, num2;
+			        cout << "Ingrese el primer numero: ";
+			        cin >> num1;
+			        cout << "Ingrese el segundo numero: ";
+			        cin >> num2;
+
+			        int mcm = calcularMCM(num1, num2);
+
+			        cout << "El minimo comun multiplo de " << num1 << " y " << num2 << " es: " << mcm << endl;
+			        break;
+		    }
+		    case 3:
+		    {
+			        int n1, n2;
+			        cout << "Ingrese el primer numero: ";
+			        cin >> n1;
+			        cout << "Ingrese el segundo numero: ";
+			        cin >> n2;
+
+			        int mcd = calcularMCD(n1, n2);
+
+			        cout << "El maximo comun divisor de " << n1 << " y " << n2 << " es: " << mcd << endl;
+			        break;
+		    }
+		    case 0:
+            {
+			         cout<<" Salir"<<endl;
+			         break;
+            }
+		default:
+			cout<<" Opcion invalida"<<endl;
+		}
+	} while(opcion!=0);
+
+return 0;
 }
+
