@@ -1,0 +1,120 @@
+#include <iostream>
+#define MAX 100
+
+using namespace std;
+
+void cargar(int vec[], int n);
+void mostrar(int vec[], int n);
+void unir(int v1[], int n, int v2[], int m, int vec[], int& tam);
+void burbuja(int vec[], int m);
+float promedio(int vec[], int m);
+
+void main() {
+	int tam, n, m, A[MAX], B[MAX], C[MAX],opcion;
+	do {
+		cout << "-----Menu-----" << endl;
+		cout << "1.Cargar" << endl;
+		cout << "2.Mostrar" << endl;
+		cout << "3.Unir" << endl;
+		cout << "4.Burbuja" << endl;
+		cout << "5.Promedio" << endl;
+		cout << "0.Salir" << endl;
+		cout << "Seleccione una opcion: ";
+		cin >> opcion;
+
+		switch (opcion) 
+		{
+		   case 1:
+		   {
+			  do {
+				cout << "Ingresar el tamaño del primer vector:";
+				cin >> n;
+			  } while ((n <= 0) || (n > MAX));
+			  cargar(A, n); 
+			  do {
+				cout << "Ingresar el tamaño del segundo vector:";
+				cin >> m;
+			  } while ((m <= 0) || (m > MAX));
+			  cargar(B, m);
+
+		     break;
+		   }
+	       case 2:
+		   {
+			  mostrar(C, tam);
+			  break;
+		   }
+		   case 3:
+		   {
+			   unir(A, n, B, m, C, tam);
+			   break;
+		   }
+		   case 4:
+		   {
+			   burbuja(C, tam);
+			break;
+		   }
+		   case 5:
+		   {
+			   cout<<"El promedio es:"<<promedio(C, tam);
+		   }
+		   case 0:
+		    {
+			   cout << "Salir" << endl;
+			   break;
+		    }
+		   default:
+			cout << "Opcion invalida" << endl;
+	    }
+	} while (opcion != 0);
+
+}
+
+void cargar(int vec[], int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		cout << "Vector[" << i << "]= ";
+		cin >> vec[i];
+	}
+}
+
+void mostrar(int vec[], int n)
+{
+	for (int i = 0; i < n; i++)
+		cout << "Vector[" << i << "]= " << vec[i] << endl;
+}
+
+void unir(int v1[], int n, int v2[], int m, int vec[], int& tam)
+{
+	for (int i = 0; i < n; i++)  // Copio el primer vector v1
+		vec[i] = v1[i];
+	for (int i = 0; i < m; i++) // Copio el segundo vector v2
+		vec[i + n] = v2[i];
+	tam = n + m;
+}
+
+void burbuja(int vec[], int m)
+{
+	int aux;
+	for (int i = 0; i < m - 1; i++)
+	{
+		for (int j = i + 1; j < m; j++)
+			if (vec[i] > vec[j])
+			{
+				aux = vec[j];
+				vec[j] = vec[i];
+				vec[i] = aux;
+			}
+	}
+}
+float promedio(int vec[], int m)
+{
+	float suma = 0,promedio=0;
+	for(int i=0; i<m;i++)
+	{
+		suma = suma + vec[i];
+		return suma / m;
+	}
+ 
+}
