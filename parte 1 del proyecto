@@ -1,0 +1,208 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <cstdlib> // Para system("cls") o system("clear")
+
+using namespace std;
+
+void limpiarPantalla();
+void salir();
+void historiaEleccionDietas();
+void mostrarDietaNormal();
+bool mensajePago();
+void realizarPago();
+
+
+void limpiarPantalla() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
+void salir() {
+    cout << "Saliendo del sistema... ¡Gracias por usar nuestro servicio de nutrición!" << endl;
+    exit(0);
+}
+
+void realizarPago() {
+    string cuenta;
+    limpiarPantalla();
+    cout << "=== Realizando pago ===" << endl;
+    cout << "Ingrese su numero de cuenta: " << endl;
+    cin>>cuenta;
+    cout << "Pago realizado con exito" << endl;
+    cout << "Gracias por tu compra. Ahora tienes acceso a todas las funcionalidades avanzadas." << endl;
+    cout << "Presiona Enter para continuar..." << endl;
+    cin.ignore();
+    cin.get();
+}
+
+bool mensajePago() {
+    int opcion;
+    do {
+        limpiarPantalla();
+        cout << "\n=== Información adicional ===" << endl;
+        cout << "Para acceder a más información, selecciona una de las siguientes opciones:" << endl;
+        cout << "1. Realizar pago" << endl;
+        cout << "2. Salir del sistema" << endl;
+        cout << "Elige una opción: ";
+        cin >> opcion;
+
+        switch (opcion) {
+            case 1:
+                realizarPago();
+                return true; // Salir de la función después de realizar el pago
+            case 2:
+                salir();
+                return false;
+            default:
+                cout << "Opción no válida. Intenta de nuevo." << endl;
+                break;
+        }
+    } while (true);
+}
+void mostrarDietaNormal() {
+    limpiarPantalla();
+    cout << "=== Dieta Normal ===" << endl;
+    if (objetivos[i] == "Bajar de peso") {
+        cout<<"===== Semana 1 ====="<<endl;
+        cout<<"~Dia 1 "<<endl;
+        cout << "- Desayuno: Yogur natural con frutas frescas y avena\n"
+                "- Almuerzo: Pechuga de pollo a la plancha con ensalada de espinacas y quinoa\n"
+                "- Cena: Sopa de verduras y una tostada integral con aguacate\n";
+        cout<<"~Dia 2 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 3 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 4 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 5 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 6 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 7 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+    } else if (objetivos[i] == "Subir de peso") {
+        cout<<"===== Semana 1 ====="<<endl;
+        cout<<"~Dia 1 "<<endl;
+        cout << "- Desayuno: Huevos revueltos con aguacate y pan integral\n"
+                "- Almuerzo: Filete de salmón con arroz integral y verduras al vapor\n"
+                "- Cena: Pasta integral con salsa de tomate casera y queso parmesano\n";
+        cout<<"~Dia 2 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 3 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 4 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 5 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 6 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 7 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+    } else if (objetivos[i] == "Mantenerte") {
+        cout<<"===== Semana 1 ====="<<endl;
+        cout<<"~Dia 1 "<<endl;
+        cout << "- Desayuno: Tostadas integrales con queso cottage y miel\n"
+                "- Almuerzo: Pollo asado con patatas al horno y ensalada verde\n"
+                "- Cena: Crema de calabaza y un sándwich integral de pavo\n";
+        cout<<"~Dia 2 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 3 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 4 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 5 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 6 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 7 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+    }
+    cout << "Presiona Enter para regresar al menú de dietas..." << endl;
+    cin.ignore();
+    cin.get();
+    if (!mensajePago()) return;
+    }
+    
+void historiaEleccionDietas() {
+    int opcion;
+    do {
+        limpiarPantalla();
+        cout << "=== Menú de Dietas ===" << endl;
+        cout << "1. Dieta Normal" << endl;
+        cout << "2. Dieta Vegetariana" << endl;
+        cout << "3. Dieta Vegana" << endl;
+        cout << "4. Regresar" << endl;
+        cout << "Elige una opción: ";
+        cin >> opcion;
+
+        switch (opcion) {
+            case 1:
+                dietas[i] = "Dieta Normal";
+                mostrarDietaNormal();
+                break;
+            case 2:
+                dietas[i] = "Dieta Vegetariana";
+                mostrarDietaVegetariana();
+                break;
+            case 3:
+                dietas[i] = "Dieta Vegana";
+                mostrarDietaVegana();
+                break;
+            case 4:
+                return;
+            default:
+                cout << "Opción no válida. Por favor, intenta de nuevo." << endl;
+        }
+    } while (opcion != 4);
+}
+
+int main() {
+    historiaLogin();
+    historiaVerificarDatos();
+    historiaDatosPersonales();
+    historiaIMC();
+    historiaObjetivos();
+    historiaEleccionDietas();
+
+    return 0;
+}
