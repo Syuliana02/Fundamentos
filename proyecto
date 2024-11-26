@@ -1,0 +1,609 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <cstdlib> // Para system("cls") o system("clear")
+
+using namespace std;
+
+// Prototipos de funciones
+void limpiarPantalla();
+void salir();
+void historiaLogin();
+void historiaVerificarDatos();
+void historiaDatosPersonales();
+void historiaIMC();
+void historiaAlergenos();
+void historiaObjetivos();
+void historiaEleccionDietas();
+void mostrarDietaNormal();
+void mostrarDietaVegetariana();
+void mostrarDietaVegana();
+bool mensajePago();
+void realizarPago();
+
+// Variables globales
+vector<string> usuarios;
+vector<string> contraseñas;
+vector<double> pesos;
+vector<double> alturas;
+vector<int> edades;
+vector<string> objetivos;
+vector<string> dietas;            // Dieta asignada a cada usuario
+vector<bool> tieneGluten;         // Si el usuario tiene alergia al gluten
+vector<bool> tieneLactosa;        // Si el usuario tiene alergia a la lactosa
+vector<bool> tieneFrutosSecos;    // Si el usuario tiene alergia a frutos secos
+vector<bool> tieneMariscos;       // Si el usuario tiene alergia a mariscos
+string usuarioActivo;
+int i = -1;                       // Índice del usuario que ha iniciado sesión
+double imc = 0;                   // Variable para almacenar el IMC del usuario
+
+// Implementación de funciones
+void limpiarPantalla() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
+void salir() {
+    cout << "Saliendo del sistema... ¡Gracias por usar nuestro servicio de nutrición!" << endl;
+    exit(0);
+}
+
+void historiaLogin() {
+    int opcion;
+    do {
+        limpiarPantalla();
+        cout << "===== MENÚ DE LOGIN =====" << endl;
+        cout << "1. Iniciar sesión" << endl;
+        cout << "2. Registrarse" << endl;
+        cout << "3. Salir" << endl;
+        cout << "Elige una opción: ";
+        cin >> opcion;
+
+        if (opcion == 1) {
+            string usuario, contraseña;
+            cout << "Ingrese su nombre de usuario: ";
+            cin >> usuario;
+            cout << "Ingrese su contraseña: ";
+            cin >> contraseña;
+
+            bool encontrado = false;
+            for (size_t j = 0; j < usuarios.size(); j++) {
+                if (usuarios[j] == usuario && contraseñas[j] == contraseña) {
+                    usuarioActivo = usuario;
+                    i = j;
+                    cout << "Inicio de sesión exitoso. ¡Bienvenido, " << usuarioActivo << "!" << endl;
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado) {
+                cout << "Usuario o contraseña incorrectos. Inténtalo de nuevo." << endl;
+            } else {
+                break;
+            }
+
+        } else if (opcion == 2) {
+            string nuevoUsuario, nuevaContraseña;
+            cout << "Ingrese un nuevo nombre de usuario: ";
+            cin >> nuevoUsuario;
+
+            bool existe = false;
+            for (const auto& u : usuarios) {
+                if (u == nuevoUsuario) {
+                    existe = true;
+                    break;
+                }
+            }
+
+            if (existe) {
+                cout << "El nombre de usuario ya está registrado. Intenta con otro nombre." << endl;
+            } else {
+                cout << "Ingrese una nueva contraseña: ";
+                cin >> nuevaContraseña;
+                usuarios.push_back(nuevoUsuario);
+                contraseñas.push_back(nuevaContraseña);
+                pesos.push_back(0);
+                alturas.push_back(0);
+                edades.push_back(0);
+                objetivos.push_back("No definido");
+                dietas.push_back("No asignada");
+                tieneGluten.push_back(false);
+                tieneLactosa.push_back(false);
+                tieneFrutosSecos.push_back(false);
+                tieneMariscos.push_back(false);
+                cout << "Usuario registrado con éxito. Ahora puedes iniciar sesión." << endl;
+            }
+
+        } else if (opcion == 3) {
+            salir();
+        } else {
+            cout << "Opción no válida. Por favor, intenta de nuevo." << endl;
+        }
+
+        cout << "Presiona Enter para continuar..." << endl;
+        cin.ignore();
+        cin.get();
+
+    } while (opcion != 1 || i == -1);
+}
+
+void historiaVerificarDatos() {
+    limpiarPantalla();
+    cout << "=== Datos actuales de " << usuarioActivo << " ===" << endl;
+    cout << "Peso: " << pesos[i] << " kg" << endl;
+    cout << "Altura: " << alturas[i] << " cm" << endl;
+    cout << "Edad: " << edades[i] << " años" << endl;
+    cout << "Objetivo: " << objetivos[i] << endl;
+    cout << "Dieta asignada: " << dietas[i] << endl;
+    cout << "Alergias: ";
+    if (!tieneGluten[i] && !tieneLactosa[i] && !tieneFrutosSecos[i] && !tieneMariscos[i]) {
+        cout << "No registradas." << endl;
+    } else {
+        if (tieneGluten[i]) cout << "Gluten ";
+        if (tieneLactosa[i]) cout << "Lactosa ";
+        if (tieneFrutosSecos[i]) cout << "Frutos Secos ";
+        if (tieneMariscos[i]) cout << "Mariscos ";
+        cout << endl;
+    }
+    cout << "Presiona Enter para continuar..." << endl;
+    cin.ignore();
+    cin.get();
+}
+
+void historiaDatosPersonales() {
+    limpiarPantalla();
+    cout << "Ingresando datos personales para " << usuarioActivo << "..." << endl;
+    cout << "Por favor, ingresa tu peso (kg): ";
+    cin >> pesos[i];
+    cout << "Por favor, ingresa tu altura (cm): ";
+    cin >> alturas[i];
+    cout << "Por favor, ingresa tu edad: ";
+    cin >> edades[i];
+
+    limpiarPantalla();
+}
+
+void historiaIMC() {
+    limpiarPantalla();
+    if (pesos[i] > 0 && alturas[i] > 0) {
+        double alturaEnMetros = alturas[i] / 100.0;
+        imc = pesos[i] / (alturaEnMetros * alturaEnMetros);
+
+        cout << "=== Cálculo del Índice de Masa Corporal (IMC) ===" << endl;
+        cout << "Usuario: " << usuarioActivo << endl;
+        cout << "Peso: " << pesos[i] << " kg" << endl;
+        cout << "Altura: " << alturas[i] << " cm" << endl;
+        cout << "Tu IMC es: " << imc << endl;
+
+        cout << "Clasificación: ";
+        if (imc < 18.5) {
+            cout << "Bajo peso" << endl;
+        } else if (imc >= 18.5 && imc < 24.9) {
+            cout << "Peso normal" << endl;
+        } else if (imc >= 25 && imc < 29.9) {
+            cout << "Sobrepeso" << endl;
+        } else {
+            cout << "Obesidad" << endl;
+        }
+    } else {
+        cout << "No se han ingresado datos suficientes para calcular el IMC. Por favor, completa tus datos personales." << endl;
+    }
+
+    cout << "Presiona Enter para continuar..." << endl;
+    cin.ignore();
+    cin.get();
+}
+
+void historiaObjetivos() {
+    limpiarPantalla();
+    cout << "Seleccionando objetivo nutricional..." << endl;
+
+    cout << "Recomendación basada en tu IMC: ";
+    if (imc < 18.5) {
+        cout << "Recomendamos subir de peso." << endl;
+    } else if (imc >= 18.5 && imc < 24.9) {
+        cout << "Recomendamos mantenerte." << endl;
+    } else if (imc >= 25) {
+        cout << "Recomendamos bajar de peso." << endl;
+    }
+
+    cout << "Por favor, selecciona tu objetivo: " << endl;
+    cout << "1. Bajar de peso" << endl;
+    cout << "2. Subir de peso" << endl;
+    cout << "3. Mantenerte" << endl;
+    int opcion;
+    cin >> opcion;
+
+    switch (opcion) {
+        case 1: objetivos[i] = "Bajar de peso"; break;
+        case 2: objetivos[i] = "Subir de peso"; break;
+        case 3: objetivos[i] = "Mantenerte"; break;
+        default: objetivos[i] = "No definido"; break;
+    }
+
+    limpiarPantalla();
+}
+void realizarPago() {
+    string cuenta;
+    limpiarPantalla();
+    cout << "=== Realizando pago ===" << endl;
+    cout << "Ingrese su numero de cuenta: " << endl;
+    cin>>cuenta;
+    cout << "Pago realizado con exito" << endl;
+    cout << "Gracias por tu compra. Ahora tienes acceso a todas las funcionalidades avanzadas." << endl;
+    cout << "Presiona Enter para continuar..." << endl;
+    cin.ignore();
+    cin.get();
+}
+
+bool mensajePago() {
+    int opcion;
+    do {
+        limpiarPantalla();
+        cout << "\n=== Información adicional ===" << endl;
+        cout << "Para acceder a más información, selecciona una de las siguientes opciones:" << endl;
+        cout << "1. Realizar pago" << endl;
+        cout << "2. Salir del sistema" << endl;
+        cout << "Elige una opción: ";
+        cin >> opcion;
+
+        switch (opcion) {
+            case 1:
+                realizarPago();
+                return true; // Salir de la función después de realizar el pago
+            case 2:
+                salir();
+                return false;
+            default:
+                cout << "Opción no válida. Intenta de nuevo." << endl;
+                break;
+        }
+    } while (true);
+}
+void mostrarDietaNormal() {
+    limpiarPantalla();
+    cout << "=== Dieta Normal ===" << endl;
+    if (objetivos[i] == "Bajar de peso") {
+        cout<<"===== Semana 1 ====="<<endl;
+        cout<<"~Dia 1 "<<endl;
+        cout << "- Desayuno: Yogur natural con frutas frescas y avena\n"
+                "- Almuerzo: Pechuga de pollo a la plancha con ensalada de espinacas y quinoa\n"
+                "- Cena: Sopa de verduras y una tostada integral con aguacate\n";
+        cout<<"~Dia 2 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 3 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 4 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 5 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 6 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 7 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+    } else if (objetivos[i] == "Subir de peso") {
+        cout<<"===== Semana 1 ====="<<endl;
+        cout<<"~Dia 1 "<<endl;
+        cout << "- Desayuno: Huevos revueltos con aguacate y pan integral\n"
+                "- Almuerzo: Filete de salmón con arroz integral y verduras al vapor\n"
+                "- Cena: Pasta integral con salsa de tomate casera y queso parmesano\n";
+        cout<<"~Dia 2 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 3 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 4 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 5 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 6 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 7 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+    } else if (objetivos[i] == "Mantenerte") {
+        cout<<"===== Semana 1 ====="<<endl;
+        cout<<"~Dia 1 "<<endl;
+        cout << "- Desayuno: Tostadas integrales con queso cottage y miel\n"
+                "- Almuerzo: Pollo asado con patatas al horno y ensalada verde\n"
+                "- Cena: Crema de calabaza y un sándwich integral de pavo\n";
+        cout<<"~Dia 2 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 3 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 4 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 5 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 6 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 7 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+    }
+    cout << "Presiona Enter para regresar al menú de dietas..." << endl;
+    cin.ignore();
+    cin.get();
+    if (!mensajePago()) return;
+    
+}
+
+void mostrarDietaVegetariana() {
+    limpiarPantalla();
+    cout << "=== Dieta Vegetariana ===" << endl;
+    if (objetivos[i] == "Bajar de peso") {
+        cout<<"===== Semana 1 ====="<<endl;
+        cout<<"~Dia 1 "<<endl;
+        cout << "- Desayuno: Batido verde (espinacas, plátano, leche de almendra) y nueces\n"
+                "- Almuerzo: Ensalada de lentejas con aguacate y verduras frescas\n"
+                "- Cena: Calabacines rellenos de quinoa y champiñones\n";
+        cout<<"~Dia 2 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 3 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 4 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 5 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 6 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 7 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+    } else if (objetivos[i] == "Subir de peso") {
+        cout<<"===== Semana 1 ====="<<endl;
+        cout<<"~Dia 1 "<<endl;
+        cout << "- Desayuno: Tortilla de espinacas con queso y pan integral\n"
+                "- Almuerzo: Risotto de setas con parmesano y ensalada mixta\n"
+                "- Cena: Hamburguesa de legumbres con patatas asadas y verduras al horno\n";
+        cout<<"~Dia 2 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 3 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 4 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 5 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 6 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 7 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+    } else if (objetivos[i] == "Mantenerte") {
+        cout<<"===== Semana 1 ====="<<endl;
+        cout<<"~Dia 1 "<<endl;
+        cout << "- Desayuno: Tostadas con hummus y rodajas de tomate\n"
+                "- Almuerzo: Pasta integral con salsa de espinacas y nueces\n"
+                "- Cena: Sopa de lentejas con pan integral\n";
+        cout<<"~Dia 2 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 3 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 4 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 5 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 6 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 7 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+    }
+    cout << "Presiona Enter para regresar al menú de dietas..." << endl;
+    cin.ignore();
+    cin.get();
+    if (!mensajePago()) return;
+}
+
+void mostrarDietaVegana() {
+    limpiarPantalla();
+    cout << "=== Dieta Vegana ===" << endl;
+    if (objetivos[i] == "Bajar de peso") {
+        cout<<"===== Semana 1 ====="<<endl;
+        cout<<"~Dia 1 "<<endl;
+        cout << "- Desayuno: Avena con leche de coco y bayas\n"
+                "- Almuerzo: Bowl de quinoa con tofu, brócoli y aderezo de limón\n"
+                "- Cena: Sopa de calabaza con semillas de chía\n";
+        cout<<"~Dia 2 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 3 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 4 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 5 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 6 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 7 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+    } else if (objetivos[i] == "Subir de peso") {
+        cout<<"===== Semana 1 ====="<<endl;
+        cout<<"~Dia 1 "<<endl;
+        cout << "- Desayuno: Pan integral con crema de cacahuete y plátano\n"
+                "- Almuerzo: Curry de garbanzos con arroz integral\n"
+                "- Cena: Pizza vegana casera con champiñones y espinacas\n";
+        cout<<"~Dia 2 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 3 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 4 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 5 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 6 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 7 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+    } else if (objetivos[i] == "Mantenerte") {
+        cout<<"===== Semana 1 ====="<<endl;
+        cout<<"~Dia 1 "<<endl;
+        cout << "- Desayuno: Smoothie de plátano, cacao y avena\n"
+                "- Almuerzo: Ensalada de pasta integral con verduras y aderezo vegano\n"
+                "- Cena: Hamburguesa vegana con pan integral y ensalada fresca\n";
+        cout<<"~Dia 2 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 3 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 4 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 5 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 6 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+        cout<<"~Dia 7 "<<endl;
+        cout << "- Desayuno:...\n"
+                "- Almuerzo:...\n"
+                "- Cena:...\n";
+    }
+    cout << "Presiona Enter para regresar al menú de dietas..." << endl;
+    cin.ignore();
+    cin.get();
+    if (!mensajePago()) return;
+}
+
+void historiaEleccionDietas() {
+    int opcion;
+    do {
+        limpiarPantalla();
+        cout << "=== Menú de Dietas ===" << endl;
+        cout << "1. Dieta Normal" << endl;
+        cout << "2. Dieta Vegetariana" << endl;
+        cout << "3. Dieta Vegana" << endl;
+        cout << "4. Regresar" << endl;
+        cout << "Elige una opción: ";
+        cin >> opcion;
+
+        switch (opcion) {
+            case 1:
+                dietas[i] = "Dieta Normal";
+                mostrarDietaNormal();
+                break;
+            case 2:
+                dietas[i] = "Dieta Vegetariana";
+                mostrarDietaVegetariana();
+                break;
+            case 3:
+                dietas[i] = "Dieta Vegana";
+                mostrarDietaVegana();
+                break;
+            case 4:
+                return;
+            default:
+                cout << "Opción no válida. Por favor, intenta de nuevo." << endl;
+        }
+    } while (opcion != 4);
+}
+
+int main() {
+    historiaLogin();
+    historiaVerificarDatos();
+    historiaDatosPersonales();
+    historiaIMC();
+    historiaObjetivos();
+    historiaEleccionDietas();
+
+    return 0;
+}
